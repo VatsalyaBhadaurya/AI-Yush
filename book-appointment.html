@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Book Appointment - HealthTech Hub</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.7.2/font/bootstrap-icons.css">
+    <style>
+        .navbar {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%) !important;
+        }
+        .booking-form {
+            max-width: 800px;
+            margin: 2rem auto;
+            padding: 2rem;
+            border-radius: 15px;
+            box-shadow: 0 0 20px rgba(0,0,0,0.1);
+        }
+        .form-control:focus {
+            box-shadow: 0 0 0 0.25rem rgba(102,126,234,0.25);
+            border-color: #667eea;
+        }
+    </style>
+</head>
+<body>
+    <nav class="navbar navbar-expand-lg navbar-dark">
+        <div class="container">
+            <a class="navbar-brand" href="index.html">HealthTech Hub</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item">
+                        <a class="nav-link" href="patient-dashboard.html">Dashboard</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link active" href="book-appointment.html">Book Appointment</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="patient-appointments.html">My Appointments</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#" onclick="Auth.logout()">Logout</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container">
+        <div class="booking-form">
+            <h2 class="mb-4">Book an Appointment</h2>
+            <form id="appointmentForm" onsubmit="bookAppointment(event)">
+                <div class="mb-3">
+                    <label class="form-label">Select Doctor</label>
+                    <select class="form-select" id="doctorSelect" required>
+                        <option value="">Choose a doctor...</option>
+                    </select>
+                </div>
+                
+                <div class="mb-3">
+                    <label class="form-label">Appointment Date</label>
+                    <input type="date" class="form-control" id="appointmentDate" required>
+                </div>
+                
+                <div class="mb-3">
+                    <label class="form-label">Preferred Time</label>
+                    <select class="form-select" id="appointmentTime" required>
+                        <option value="">Choose a time slot...</option>
+                    </select>
+                </div>
+                
+                <div class="mb-3">
+                    <label class="form-label">Appointment Type</label>
+                    <select class="form-select" id="appointmentType" required>
+                        <option value="">Select type...</option>
+                        <option value="General Checkup">General Checkup</option>
+                        <option value="Follow-up">Follow-up</option>
+                        <option value="Consultation">Consultation</option>
+                        <option value="Test/Lab Work">Test/Lab Work</option>
+                    </select>
+                </div>
+                
+                <div class="mb-3">
+                    <label class="form-label">Reason for Visit</label>
+                    <textarea class="form-control" id="visitReason" rows="3" required></textarea>
+                </div>
+                
+                <div class="mb-3">
+                    <label class="form-label">Any Previous Medical History?</label>
+                    <textarea class="form-control" id="medicalHistory" rows="2"></textarea>
+                </div>
+                
+                <button type="submit" class="btn btn-primary">Book Appointment</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Toast container for notifications -->
+    <div class="toast-container position-fixed bottom-0 end-0 p-3"></div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="dashboard-sync.js"></script>
+    <script src="auth.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            if (!Auth.isLoggedIn()) {
+                window.location.href = 'login.html';
+                return;
+            }
+            
+            initializeForm();
+        });
+
+        function initializeForm() {
+            // Set minimum date to today
+            const today = new Date().toISOString().split('T')[0];
+            document.getElementById('appointmentDate').min = today;
+            
+            // Populate doctor select
+            const doctors = [
+                { id: 'doc1', name: 'Dr. Priya Sharma', specialization: 'General Physician' },
+                { id: 'doc2', name: 'Dr. Rahul Verma', specialization: 'Cardiologist' },
+                { id: 'doc3', name: 'Dr. Sarah Khan', specialization: 'Pediatrician' }
+            ];
+            
+            const doctorSelect = document.getElementById('doctorSelect');
+            doctors.forEach(doctor => {
+                const option = document.createElement('option');
+                option.value = doctor.id;
+                option.textContent = `${doctor.name} (${doctor.specialization})`;
+                doctorSelect.appendChild(option);
+            });
+            
+            // Populate time slots
+            const timeSlots = generateTimeSlots();
+            const timeSelect = document.getElementById('appointmentTime');
+            timeSlots.forEach(slot => {
+                const option = document.createElement('option');
+                option.value = slot;
+                option.textContent = slot;
+                timeSelect.appendChild(option);
+            });
+        }
+
+        function generateTimeSlots() {
+            const slots = [];
+            for (let hour = 9; hour <= 17; hour++) {
+                slots.push(`${hour.toString().padStart(2, '0')}:00`);
+                slots.push(`${hour.toString().padStart(2, '0')}:30`);
+            }
+            return slots;
+        }
+
+        function bookAppointment(event) {
+            event.preventDefault();
+            
+            const user = Auth.getCurrentUser();
+            const appointment = {
+                doctorId: document.getElementById('doctorSelect').value,
+                patientId: user.id,
+                patientName: user.name,
+                date: document.getElementById('appointmentDate').value,
+                time: document.getElementById('appointmentTime').value,
+                type: document.getElementById('appointmentType').value,
+                reason: document.getElementById('visitReason').value,
+                medicalHistory: document.getElementById('medicalHistory').value
+            };
+            
+            try {
+                DashboardSync.addAppointment(appointment);
+                showNotification('Appointment booked successfully!', 'success');
+                setTimeout(() => {
+                    window.location.href = 'patient-appointments.html';
+                }, 2000);
+            } catch (error) {
+                showNotification('Error booking appointment. Please try again.', 'error');
+            }
+        }
+
+        function showNotification(message, type = 'success') {
+            const toastHtml = `
+                <div class="toast align-items-center text-white bg-${type === 'success' ? 'success' : 'danger'} border-0" role="alert">
+                    <div class="d-flex">
+                        <div class="toast-body">${message}</div>
+                        <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast"></button>
+                    </div>
+                </div>
+            `;
+            
+            const toastContainer = document.querySelector('.toast-container');
+            toastContainer.insertAdjacentHTML('beforeend', toastHtml);
+            
+            const toastElement = toastContainer.lastElementChild;
+            const toast = new bootstrap.Toast(toastElement);
+            toast.show();
+            
+            toastElement.addEventListener('hidden.bs.toast', () => {
+                toastElement.remove();
+            });
+        }
+    </script>
+</body>
+</html>

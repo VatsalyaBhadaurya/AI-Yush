@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Doctor Dashboard - HealthCare Hub</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="dashboard.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        /* Disease Prediction */
+.prediction-container {
+    background: white;
+    padding: 2rem;
+    border-radius: 10px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.model-selection {
+    margin-bottom: 2rem;
+}
+
+.model-selection select {
+    width: 100%;
+    padding: 0.8rem;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    margin-top: 0.5rem;
+}
+
+.prediction-form {
+    margin-bottom: 2rem;
+}
+
+.predict-btn {
+    background-color: var(--secondary-color);
+    color: white;
+    padding: 1rem 2rem;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.disease-buttons {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 1.5rem;
+    padding: 1rem;
+}
+
+.disease-btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 1rem;
+    padding: 1.5rem;
+    border: none;
+    border-radius: 10px;
+    background-color: var(--primary-color);
+    background-color:#666;
+    font-size: 1.1rem;
+    cursor: pointer;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    color: white;
+}
+
+.disease-btn:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+}
+
+.disease-btn i {
+    font-size: 1.5rem;
+}
+
+.prediction-results {
+    border-top: 1px solid #eee;
+    padding-top: 2rem;
+}
+
+.result-item {
+    margin-bottom: 1.5rem;
+}
+
+.result-item h4 {
+    margin-bottom: 0.5rem;
+    color: var(--primary-color);
+}
+
+.prediction-positive {
+    color: #dc3545;
+    font-weight: bold;
+}
+
+.prediction-negative {
+    color: #28a745;
+    font-weight: bold;
+}
+
+.loading {
+    text-align: center;
+    padding: 2rem;
+  color:#666;
+}
+/* Common Elements */
+.add-btn {
+    background-color: var(--secondary-color);
+    color: white;
+    padding: 0.8rem 1.5rem;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.view-btn {
+    background-color: var(--secondary-color);
+    color: white;
+    padding: 0.5rem 1rem;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+.status {
+    padding: 0.4rem 0.8rem;
+    border-radius: 20px;
+    font-size: 0.9rem;
+}
+
+.status.pending {
+    background-color: #fff3cd;
+    color: #856404;
+}
+
+.status.confirmed {
+    background-color: #d4edda;
+    color: #155724;
+}
+
+.status.cancelled {
+    background-color: #f8d7da;
+    color: #721c24;
+}
+
+    </style>
+
+
+        <!-- Disease Prediction Tab -->
+        <section id="disease-prediction" class="tab-content">
+            <header class="section-header">
+                <h2>Disease Prediction</h2>
+            </header>
+            <div class="prediction-container">
+                <div class="disease-buttons">
+                    <button onclick="window.open('retina.html', '_blank')" class="disease-btn">
+                        <i class="fas fa-heartbeat"></i>
+                        Retinal Analysis
+                    </button>
+                    <button onclick="window.open('arthritis.html', '_blank')" class="disease-btn">
+                        <i class="fas fa-heart"></i>
+                        Arthritis Prediction
+                    </button>
+                    <button onclick="window.open('goiter.html', '_blank')" class="disease-btn">
+                        <i class="fas fa-procedures"></i>
+                        Hypothyroidism Prediction
+                    </button>
+                    <button onclick="window.open('lungCancer.html', '_blank')" class="disease-btn">
+                        <i class="fas fa-kidneys"></i>
+                        Lung Cancer Prediction
+                    </button>
+                    <button onclick="window.open('brain-tumor.html', '_blank')" class="disease-btn">
+                        <i class="fas fa-ribbon"></i>
+                        Brain Tumor Prediction
+                    </button>
+                </div>
+            </div>
+        </section>
+
+     
+</body>
+</html>

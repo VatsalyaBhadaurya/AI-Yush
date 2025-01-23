@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Brain Tumor Image Analysis</title>
+  <style>
+  /* styles.css */
+body {
+  font-family: 'Roboto', sans-serif;
+  margin: 0;
+  padding: 0;
+  background: #e6f7e6;
+  color: #333;
+}
+
+.container {
+  text-align: center;
+  padding: 20px;
+}
+
+header {
+  background-color: #4caf50;
+  padding: 20px;
+  color: white;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+header h1 {
+  margin: 0;
+  font-size: 2rem;
+}
+
+main {
+  margin-top: 40px;
+}
+
+.buttons button {
+  background-color: #2f855a;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  padding: 10px 20px;
+  margin: 10px;
+  font-size: 1rem;
+  cursor: pointer;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  transition: background-color 0.3s ease, transform 0.2s ease;
+}
+
+.buttons button:hover {
+  background-color: #276749;
+  transform: translateY(-3px);
+}
+
+.buttons button i {
+  margin-right: 8px;
+}
+
+.upload {
+  margin-top: 20px;
+}
+
+.file-upload-label {
+  background-color: #4299e1;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  padding: 10px 20px;
+  font-size: 1rem;
+  cursor: pointer;
+  display: inline-block;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  transition: background-color 0.3s ease, transform 0.2s ease;
+}
+
+.file-upload-label:hover {
+  background-color: #2b6cb0;
+  transform: translateY(-3px);
+}
+
+.file-upload-input {
+  display: none;
+}
+
+footer {
+  margin-top: 40px;
+  font-size: 0.9rem;
+  color: #555;
+}
+
+footer a {
+  color: #4299e1;
+  text-decoration: none;
+  margin: 0 5px;
+}
+
+footer a:hover {
+  text-decoration: underline;
+}
+
+  </style>
+</head>
+<body>
+  <div class="container">
+    <header>
+      <h1>Brain Tumor Image Analysis</h1>
+    </header>
+    <main>
+      <div class="buttons">
+        <button id="start-webcam"><i class="icon-camera"></i> Start Webcam</button>
+        <button id="stop-webcam"><i class="icon-camera-off"></i> Stop Webcam</button>
+        <button id="capture"><i class="icon-snapshot"></i> Capture</button>
+      </div>
+      <div class="upload">
+        <label for="file-upload" class="file-upload-label">
+          <i class="icon-upload"></i> Choose File
+        </label>
+        <input type="file" id="file-upload" class="file-upload-input" accept=".jpg,.png,.pdf">
+      </div>
+    </main>
+    <footer>
+      <p>© 2025 Brain Tumor Analysis. <a href="#">Privacy Policy</a> | <a href="#">Contact Us</a></p>
+    </footer>
+  </div>
+  <script>
+  // script.js
+const startWebcamButton = document.getElementById('start-webcam');
+const stopWebcamButton = document.getElementById('stop-webcam');
+const captureButton = document.getElementById('capture');
+const webcamElement = document.getElementById('webcam');
+
+let webcamStream = null;
+
+// Start the webcam
+startWebcamButton.addEventListener('click', async () => {
+  try {
+    webcamStream = await navigator.mediaDevices.getUserMedia({ video: true });
+    webcamElement.srcObject = webcamStream;
+  } catch (err) {
+    alert('Error starting webcam: ' + err.message);
+  }
+});
+
+// Stop the webcam
+stopWebcamButton.addEventListener('click', () => {
+  if (webcamStream) {
+    const tracks = webcamStream.getTracks();
+    tracks.forEach((track) => track.stop());
+    webcamElement.srcObject = null;
+    webcamStream = null;
+  } else {
+    alert('Webcam is not running.');
+  }
+});
+
+// Capture image (Optional)
+captureButton.addEventListener('click', () => {
+  if (!webcamStream) {
+    alert('Webcam is not running.');
+    return;
+  }
+
+  const canvas = document.createElement('canvas');
+  canvas.width = webcamElement.videoWidth;
+  canvas.height = webcamElement.videoHeight;
+
+  const context = canvas.getContext('2d');
+  context.drawImage(webcamElement, 0, 0, canvas.width, canvas.height);
+
+  // For demonstration: Display the captured image in a new tab
+  const imageUrl = canvas.toDataURL('image/png');
+  window.open(imageUrl);
+});
+
+  </script>
+</body>
+</html>

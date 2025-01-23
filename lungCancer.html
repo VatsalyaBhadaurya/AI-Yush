@@ -1,0 +1,298 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lung Cancer Detection | AI Medical Analysis</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            padding: 20px;
+        }
+        #webcam-container {
+            margin: 20px auto;
+        }
+        button {
+            padding: 10px 20px;
+            font-size: 16px;
+            cursor: pointer;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            margin: 10px;
+        }
+        button:hover {
+            background-color: #45a049;
+        }
+        #label-container div {
+            margin-top: 10px;
+            font-size: 18px;
+            color: #333;
+        }
+        #webcam-container canvas, #uploaded-image {
+            max-width: 300px;
+            max-height: 300px;
+            margin-top: 20px;
+        }
+        .container {
+            max-width: 800px;
+            margin: 40px auto;
+            padding: 20px;
+            background-color: #f9f9f9;
+            border: 1px solid #ddd;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+        .header {
+            text-align: center;
+        }
+        .header h1 {
+            font-size: 36px;
+            margin-bottom: 10px;
+        }
+        .header .subtitle {
+            font-size: 18px;
+            color: #666;
+        }
+        .controls {
+            margin-top: 20px;
+            text-align: center;
+        }
+        .btn {
+            padding: 10px 20px;
+            font-size: 16px;
+            cursor: pointer;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            margin: 10px;
+        }
+        .btn-secondary {
+            background-color: #ccc;
+            color: #666;
+        }
+        .btn:hover {
+            background-color: #45a049;
+        }
+        .file-upload {
+            margin-top: 20px;
+        }
+        .file-upload label {
+            padding: 10px 20px;
+            font-size: 16px;
+            cursor: pointer;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            margin: 10px;
+        }
+        .content-area {
+            margin-top: 20px;
+        }
+        .preview-section {
+            margin-bottom: 20px;
+        }
+        .image-preview {
+            margin-top: 20px;
+        }
+        .loading-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+            display: none;
+        }
+        .loading-spinner {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            border: 16px solid #f3f3f3;
+            border-top: 16px solid #3498db;
+            border-radius: 50%;
+            width: 120px;
+            height: 120px;
+            animation: spin 2s linear infinite;
+        }
+        @keyframes spin {
+            0% {
+                transform: translate(-50%, -50%) rotate(0deg);
+            }
+            100% {
+                transform: translate(-50%, -50%) rotate(360deg);
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>Lung Cancer Detection</h1>
+            <p class="subtitle">Advanced AI-powered medical image analysis for detecting lung cancer from CT scans</p>
+        </div>
+        
+        <div class="controls">
+            <button type="button" onclick="startWebcam()" class="btn">
+                <i class="fas fa-camera"></i>
+                Start Camera
+            </button>
+            <button type="button" onclick="stopWebcam()" class="btn btn-secondary">
+                <i class="fas fa-stop"></i>
+                Stop Camera
+            </button>
+            <button type="button" onclick="captureWebcam()" class="btn">
+                <i class="fas fa-camera-retro"></i>
+                Capture Image
+            </button>
+            <div class="file-upload">
+                <label for="imageUpload">
+                    <i class="fas fa-upload"></i>
+                    Upload CT Scan
+                </label>
+                <input type="file" id="imageUpload" accept="image/*" onchange="uploadPhoto()">
+            </div>
+        </div>
+
+        <div class="content-area">
+            <div class="preview-section">
+                <h3>Image Preview</h3>
+                <div id="webcam-container"></div>
+                <div class="image-preview">
+                    <img id="uploaded-image" style="display:none;">
+                </div>
+            </div>
+            
+            <div id="label-container"></div>
+        </div>
+    </div>
+
+    <div class="loading-overlay">
+        <div class="loading-spinner"></div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs@latest/dist/tf.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@teachablemachine/image@latest/dist/teachablemachine-image.min.js"></script>
+    <script type="text/javascript">
+        const URL = "https://teachablemachine.withgoogle.com/models/OXqkOdC6h/";
+
+        let model, webcam, labelContainer, maxPredictions;
+        let webcamRunning = false;
+
+        // Load the model
+        async function loadModel() {
+            const modelURL = URL + "model.json";
+            const metadataURL = URL + "metadata.json";
+
+            model = await tmImage.load(modelURL, metadataURL);
+            maxPredictions = model.getTotalClasses();
+
+            labelContainer = document.getElementById("label-container");
+            for (let i = 0; i < maxPredictions; i++) {
+                labelContainer.appendChild(document.createElement("div"));
+            }
+        }
+
+        // Start the webcam
+        async function startWebcam() {
+            if (!model) await loadModel();
+            if (webcamRunning) return;
+
+            const flip = true; // Flip webcam horizontally
+            webcam = new tmImage.Webcam(300, 300, flip);
+            await webcam.setup();
+            await webcam.play();
+            document.getElementById("webcam-container").appendChild(webcam.canvas);
+            webcamRunning = true;
+
+            window.requestAnimationFrame(webcamLoop);
+        }
+
+        // Stop the webcam
+        function stopWebcam() {
+            if (webcam && webcamRunning) {
+                webcam.stop();
+                webcamRunning = false;
+                document.getElementById("webcam-container").innerHTML = '';
+            }
+        }
+
+        // Capture the webcam image
+        async function captureWebcam() {
+            if (webcam && webcamRunning) {
+                const canvas = document.createElement("canvas");
+                canvas.width = 300;
+                canvas.height = 300;
+                const ctx = canvas.getContext("2d");
+                ctx.drawImage(webcam.canvas, 0, 0, canvas.width, canvas.height);
+
+                document.getElementById("webcam-container").appendChild(canvas);
+
+                const prediction = await model.predict(canvas);
+
+                // Display predictions for all classes
+                labelContainer.innerHTML = ''; // Clear previous predictions
+                prediction.forEach((p) => {
+                    const classPrediction = `${p.className}: ${(p.probability * 100).toFixed(2)}%`;
+                    labelContainer.innerHTML += `<div>${classPrediction}</div>`;
+                });
+            }
+        }
+
+        // Webcam loop for live predictions
+        async function webcamLoop() {
+            if (webcamRunning) {
+                webcam.update();
+                window.requestAnimationFrame(webcamLoop);
+            }
+        }
+
+        // Upload and predict image
+        async function uploadPhoto() {
+            if (!model) await loadModel();
+
+            const imageElement = document.getElementById("uploaded-image");
+            const fileInput = document.getElementById("imageUpload");
+            const file = fileInput.files[0];
+
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = async function (event) {
+                    imageElement.src = event.target.result;
+                    imageElement.style.display = "block";
+
+                    // Ensure the image is resized for consistent predictions
+                    const resizedCanvas = document.createElement("canvas");
+                    resizedCanvas.width = 224; // Match the size of the model input
+                    resizedCanvas.height = 224;
+                    const ctx = resizedCanvas.getContext("2d");
+
+                    // Draw the uploaded image to the resized canvas
+                    imageElement.onload = async function () {
+                        ctx.drawImage(imageElement, 0, 0, 224, 224);
+
+                        // Predict using the resized canvas
+                        const prediction = await model.predict(resizedCanvas);
+
+                        // Display predictions for all classes
+                        labelContainer.innerHTML = ''; // Clear previous predictions
+                        prediction.forEach((p) => {
+                            const classPrediction = `${p.className}: ${(p.probability * 100).toFixed(2)}%`;
+                            labelContainer.innerHTML += `<div>${classPrediction}</div>`;
+                        });
+                    };
+                };
+                reader.readAsDataURL(file);
+            }
+        }
+
+        // Load the model initially
+        loadModel();
+    </script>
+</body>
+</html>

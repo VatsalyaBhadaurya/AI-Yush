@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Doctor Appointments - HealthTech Hub</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.7.2/font/bootstrap-icons.css">
+    <style>
+        .navbar {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%) !important;
+        }
+        .appointment-card {
+            border-radius: 15px;
+            margin-bottom: 1rem;
+            transition: all 0.3s ease;
+        }
+        .appointment-card:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+        }
+    </style>
+</head>
+<body>
+    <nav class="navbar navbar-expand-lg navbar-dark">
+        <div class="container">
+            <a class="navbar-brand" href="doctor-dashboard.html">HealthTech Hub</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item">
+                        <a class="nav-link" href="doctor-dashboard.html">Dashboard</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link active" href="doctor-appointments.html">Appointments</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="doctor-reports.html">Reports</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#" onclick="logout()">Logout</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container mt-4">
+        <h2 class="mb-4">My Appointments</h2>
+        <div class="row">
+            <div class="col-md-12">
+                <div class="card">
+                    <div class="card-body">
+                        <div id="appointmentsList"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="auth.js"></script>
+    <script src="dashboard-sync.js"></script>
+    <script src="doctor-dashboard.js"></script>
+    <script>
+        // Check authentication
+        if (!Auth.isAuthenticated() || Auth.getCurrentUser().role !== 'doctor') {
+            window.location.href = 'login.html';
+        }
+
+        document.addEventListener('DOMContentLoaded', () => {
+            loadAppointments();
+            
+            // Listen for appointment updates
+            window.addEventListener(DashboardSync.EVENTS.APPOINTMENT_UPDATED, () => {
+                console.log('Appointment update detected, refreshing appointments...');
+                loadAppointments();
+            });
+        });
+
+        function loadAppointments() {
+            const doctorId = Auth.getCurrentUser().id;
+            const appointments = DashboardSync.getDoctorAppointments(doctorId);
+            
+            const appointmentsList = document.getElementById('appointmentsList');
+            appointmentsList.innerHTML = appointments.map(appointment => `
+                <div class="appointment-card card mb-3">
+                    <div class="card-body">
+                        <div class="row">
+                            <div class="col-md-8">
+                                <h5 class="card-title">${appointment.patientName}</h5>
+                                <p class="card-text">
+                                    <strong>Date:</strong> ${new Date(appointment.date).toLocaleDateString()}<br>
+                                    <strong>Time:</strong> ${appointment.time}<br>
+                                    <strong>Type:</strong> ${appointment.type}<br>
+                                    <strong>Status:</strong> <span class="badge bg-${getStatusColor(appointment.status)}">${appointment.status}</span>
+                                </p>
+                            </div>
+                            <div class="col-md-4 text-end">
+                                ${getActionButtons(appointment)}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        function getStatusColor(status) {
+            switch(status) {
+                case 'pending': return 'warning';
+                case 'confirmed': return 'success';
+                case 'completed': return 'info';
+                default: return 'secondary';
+            }
+        }
+
+        function getActionButtons(appointment) {
+            if (appointment.status === 'pending') {
+                return `<button class="btn btn-success me-2" onclick="confirmAppointment('${appointment.id}')">Confirm</button>`;
+            } else if (appointment.status === 'confirmed') {
+                return `<button class="btn btn-primary me-2" onclick="startConsultation('${appointment.id}')">Start</button>`;
+            } else if (appointment.status === 'in-progress') {
+                return `<button class="btn btn-info" onclick="generateReport('${appointment.id}')">Generate Report</button>`;
+            }
+            return '';
+        }
+    </script>
+</body>
+</html>

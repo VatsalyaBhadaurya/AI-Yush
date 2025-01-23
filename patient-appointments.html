@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+
+    <!-- Page Header -->
+    <div class="page-header">
+        <div class="container">
+            <div class="row align-items-center">
+                <div class="col-md-6">
+                    <h1 class="display-4 mb-0">My Appointments</h1>
+                </div>
+                <div class="col-md-6 text-md-end">
+                    <button class="btn btn-light" onclick="showBookAppointmentModal()">
+                        <i class="bi bi-plus-circle me-2"></i>Book New Appointment
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Main Content -->
+    <div class="container">
+        <!-- Filters -->
+        <div class="row">
+            <div class="col-12">
+                <div class="card filter-card">
+                    <div class="card-body">
+                        <div class="row">
+                            <div class="col-md-3 mb-3 mb-md-0">
+                                <label class="form-label">Test Type</label>
+                                <select class="form-select" id="filterTestType" onchange="filterAppointments()">
+                                    <option value="">All Tests</option>
+                                    <option value="Lung Cancer Detection">Lung Cancer Detection</option>
+                                    <option value="Brain Tumor Analysis">Brain Tumor Analysis</option>
+                                    <option value="Diabetic Retinopathy">Diabetic Retinopathy</option>
+                                    <option value="Osteoarthritis Detection">Osteoarthritis Detection</option>
+                                    <option value="Goiter Analysis">Goiter Analysis</option>
+                                </select>
+                            </div>
+                            <div class="col-md-3 mb-3 mb-md-0">
+                                <label class="form-label">Status</label>
+                                <select class="form-select" id="filterStatus" onchange="filterAppointments()">
+                                    <option value="">All Status</option>
+                                    <option value="Pending">Pending</option>
+                                    <option value="Confirmed">Confirmed</option>
+                                </select>
+                            </div>
+                            <div class="col-md-3 mb-3 mb-md-0">
+                                <label class="form-label">Date Range</label>
+                                <select class="form-select" id="filterDate" onchange="filterAppointments()">
+                                    <option value="">All Dates</option>
+                                    <option value="today">Today</option>
+                                    <option value="week">This Week</option>
+                                    <option value="month">This Month</option>
+                                </select>
+                            </div>
+                            <div class="col-md-3 mb-3 mb-md-0">
+                                <label class="form-label">Sort By</label>
+                                <select class="form-select" id="sortBy" onchange="filterAppointments()">
+                                    <option value="date-asc">Date (Oldest First)</option>
+                                    <option value="date-desc">Date (Newest First)</option>
+                                    <option value="status">Status</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Appointments List -->
+        <div id="appointmentsContainer">
+            <!-- Appointments will be loaded here -->
+        </div>
+    </div>
+
+    <!-- Book Appointment Modal -->
+    <div class="modal fade" id="bookAppointmentModal" tabindex="-1">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Book Appointment</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    <form id="appointmentForm" onsubmit="return false;">
+                        <div class="mb-3">
+                            <label class="form-label">Full Name</label>
+                            <input type="text" class="form-control" id="patientName" required>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">Email Address</label>
+                            <input type="email" class="form-control" id="patientEmail" required>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">Select Test Type</label>
+                            <select class="form-select" id="testType" required>
+                                <option value="">Choose test type...</option>
+                                <option value="Lung Cancer Detection">Lung Cancer Detection</option>
+                                <option value="Brain Tumor Analysis">Brain Tumor Analysis</option>
+                                <option value="Diabetic Retinopathy">Diabetic Retinopathy</option>
+                                <option value="Osteoarthritis Detection">Osteoarthritis Detection</option>
+                                <option value="Goiter Analysis">Goiter Analysis</option>
+                            </select>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">Preferred Date</label>
+                            <input type="date" class="form-control" id="appointmentDate" required>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">Preferred Time</label>
+                            <select class="form-select" id="appointmentTime" required>
+                                <!-- Time slots will be populated by JavaScript -->
+                            </select>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">Additional Notes</label>
+                            <textarea class="form-control" id="appointmentNotes" rows="3"></textarea>
+                        </div>
+                        <div class="text-end">
+                            <button type="button" class="btn btn-secondary me-2" data-bs-dismiss="modal">Close</button>
+                            <button type="submit" class="btn btn-custom">Book Appointment</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="auth.js"></script>
+    <script src="dashboard-sync.js"></script>
+    <script src="patient-appointments.js"></script>
+</body>
+</html>

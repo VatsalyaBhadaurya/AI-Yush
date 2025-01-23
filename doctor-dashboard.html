@@ -1,0 +1,313 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Doctor Dashboard - AIयुष</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.7.2/font/bootstrap-icons.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css">
+    <style>
+        :root {
+            --primary-gradient: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            --secondary-gradient: linear-gradient(135deg, #2193b0 0%, #6dd5ed 100%);
+        }
+
+        .navbar {
+            background: var(--primary-gradient) !important;
+            box-shadow: 0 2px 15px rgba(0,0,0,0.1);
+        }
+
+        .welcome-section {
+            background: var(--primary-gradient);
+            color: white;
+            padding: 3rem 0;
+            margin-bottom: 2rem;
+        }
+
+        .stats-card {
+            border: none;
+            border-radius: 15px;
+            transition: all 0.3s ease;
+            background: var(--secondary-gradient);
+            color: white;
+        }
+
+        .feature-card {
+            border: none;
+            border-radius: 15px;
+            transition: all 0.3s ease;
+            box-shadow: 0 2px 15px rgba(0,0,0,0.1);
+            cursor: pointer;
+        }
+
+        .feature-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 5px 20px rgba(0,0,0,0.2);
+        }
+
+        .appointment-card {
+            border: none;
+            border-radius: 15px;
+            margin-bottom: 1rem;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            transition: all 0.3s ease;
+        }
+
+        .appointment-card:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+        }
+
+        .btn-custom {
+            background: var(--primary-gradient);
+            color: white;
+            border: none;
+            border-radius: 25px;
+            padding: 0.5rem 1.5rem;
+            transition: all 0.3s ease;
+        }
+
+        .btn-custom:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+            color: white;
+        }
+
+        .status-badge {
+            padding: 0.5rem 1rem;
+            border-radius: 20px;
+            font-size: 0.8rem;
+        }
+
+        .status-pending {
+            background-color: #ffd700;
+            color: #000;
+        }
+
+        .status-confirmed {
+            background-color: #28a745;
+            color: white;
+        }
+
+        .status-completed {
+            background-color: #17a2b8;
+            color: white;
+        }
+        #google_translate_element {
+            margin: 0;
+            padding: 0;
+            position: absolute;
+            top: 1.5%;
+            left: 55%;
+            width: 100%;
+            z-index: 9999;
+        }
+        iframe.goog-te-banner-frame {
+            display: none !important; /* Hides the Google Translate banner */
+        }
+
+        /* Ensure no extra gap left from the iframe removal */
+        html {
+            margin-top: 0 !important;
+        }
+
+        /* Hide the "Translated into" and other dropdown-related elements */
+        .goog-te-gadget-simple span {
+            display: none !important;
+        }
+
+        /* Style the dropdown only */
+        select.goog-te-combo {
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            padding: 4px;
+            font-size: 14px;
+        }
+        #logoutButton{
+            z-index: 9999;
+        }
+    </style>
+</head>
+<div id="google_translate_element"></div>
+<body>
+    <!-- Navigation -->
+    <nav class="navbar navbar-expand-lg navbar-dark">
+        <div class="container">
+            <a class="navbar-brand" href="doctor-dashboard.html">
+                <i class="bi bi-heart-pulse-fill me-2"></i>
+                AIयुष
+            </a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav me-auto">
+                    <li class="nav-item">
+                        <a class="nav-link active" href="doctor-dashboard.html">Dashboard</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="doctor-appointments.html">Appointments</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="doctor-reports.html">Reports</a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="doctor-tests.html" class="nav-link">Tests</a>
+                    </li>
+                </ul>
+                <div class="d-flex align-items-center">
+                    <span class="text-light me-3">Welcome, Dr. <span id="userDisplay"></span></span>
+                    <button class="btn btn-outline-light" id="logoutButton" onclick="logout()">Logout</button>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Welcome Section -->
+    <div class="welcome-section">
+        <div class="container">
+            <div class="row align-items-center">
+                <div class="col-md-6">
+                    <h1 class="display-4" id="greetingText">Good Evening!</h1>
+                    <p class="lead">Your medical expertise makes a difference.</p>
+                </div>
+                <div class="col-md-6">
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <div class="card stats-card">
+                                <div class="card-body text-center">
+                                    <h2 class="display-4 mb-0" id="todayAppointments">0</h2>
+                                    <p class="mb-0">Today's Appointments</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <div class="card stats-card">
+                                <div class="card-body text-center">
+                                    <h2 class="display-4 mb-0" id="pendingReports">0</h2>
+                                    <p class="mb-0">Pending Reports</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Main Content -->
+    <div class="container">
+        <!-- Feature Cards -->
+        <div class="row mb-4">
+            <div class="col-md-4">
+                <div class="card feature-card" onclick="handleFeatureCardClick('appointments')">
+                    <div class="card-body text-center">
+                        <i class="bi bi-calendar-check display-4"></i>
+                        <h5 class="card-title mt-3">View Appointments</h5>
+                        <p class="card-text">Manage your schedule</p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="card feature-card" onclick="handleFeatureCardClick('reports')">
+                    <div class="card-body text-center">
+                        <i class="bi bi-file-medical display-4"></i>
+                        <h5 class="card-title mt-3">Generate Reports</h5>
+                        <p class="card-text">Create and manage patient reports</p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="card feature-card" onclick="handleFeatureCardClick('patients')">
+                    <div class="card-body text-center">
+                        <i class="bi bi-people display-4"></i>
+                        <h5 class="card-title mt-3">Patient List</h5>
+                        <p class="card-text">View your patients</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Today's Appointments -->
+        <div class="card mb-4">
+            <div class="card-header d-flex justify-content-between align-items-center">
+                <h5 class="mb-0">Today's Appointments</h5>
+                <button class="btn btn-custom btn-sm" onclick="handleFeatureCardClick('appointments')">
+                    View All
+                </button>
+            </div>
+            <div class="card-body">
+                <div id="todayAppointmentsList">
+                    <!-- Appointments will be loaded here -->
+                </div>
+            </div>
+        </div>
+
+        <!-- Pending Reports -->
+        <div class="card">
+            <div class="card-header d-flex justify-content-between align-items-center">
+                <h5 class="mb-0">Pending Reports</h5>
+                <button class="btn btn-custom btn-sm" onclick="handleFeatureCardClick('reports')">
+                    View All
+                </button>
+            </div>
+            <div class="card-body">
+                <div id="pendingReportsList">
+                    <!-- Pending reports will be loaded here -->
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Generate Report Modal -->
+    <div class="modal fade" id="generateReportModal" tabindex="-1">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Generate Report</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    <form id="reportForm">
+                        <div class="mb-3">
+                            <label class="form-label">Patient Name</label>
+                            <input type="text" class="form-control" id="patientName" readonly>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">Test Type</label>
+                            <input type="text" class="form-control" id="testType" readonly>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">Diagnosis</label>
+                            <textarea class="form-control" id="diagnosis" rows="3" required></textarea>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">Analysis</label>
+                            <textarea class="form-control" id="analysis" rows="4" required></textarea>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">Recommendations</label>
+                            <textarea class="form-control" id="recommendations" rows="3" required></textarea>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">Upload Images</label>
+                            <input type="file" class="form-control" id="reportImages" multiple accept="image/*">
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-primary" onclick="generateReport()">Generate Report</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="auth.js"></script>
+    <script src="dashboard-sync.js"></script>
+    <script src="doctor-dashboard.js"></script>
+    <script type="text/javascript" src="//translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script>
+</body>
+</html>

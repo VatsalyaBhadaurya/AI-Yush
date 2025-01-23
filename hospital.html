@@ -1,0 +1,224 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MediFind Delhi - Find the Best Hospitals</title>
+    <!-- Add Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <!-- Add Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="hospital.css">
+    <!-- OpenStreetMap Leaflet CSS and JS -->
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+    <script src="https://unpkg.com/leaflet.locatecontrol/dist/L.Control.Locate.min.js"></script>
+</head>
+<body>
+    <!-- Modern Header -->
+    <header class="header">
+        <nav>
+            <div class="logo">
+                <i class="fas fa-hospital-alt"></i>
+                <span>MediFind Delhi</span>
+            </div>
+            <div class="nav-links">
+                <a href="#home" class="active"><i class="fas fa-home"></i> Home</a>
+                <a href="#hospitals"><i class="fas fa-hospital"></i> Hospitals</a>
+                <a href="#emergency"><i class="fas fa-ambulance"></i> Emergency</a>
+                <a href="#contact" class="contact-btn">Contact Us</a>
+            </div>
+            <button class="mobile-menu-btn">
+                <span></span><span></span><span></span>
+            </button>
+        </nav>
+    </header>
+
+    <!-- Enhanced Hero Section -->
+    <section class="hero" id="home">
+        <div class="hero-content">
+            <h1>Find the Best Medical Care in Delhi</h1>
+            <p>Discover top-rated hospitals and healthcare facilities near you</p>
+            <div class="search-container">
+                <div class="search-box">
+                    <i class="fas fa-search"></i>
+                    <input type="text" placeholder="Search hospitals by name or location...">
+                    <select class="filter-select">
+                        <option value="all">All Categories</option>
+                        <option value="government">Government</option>
+                        <option value="private">Private</option>
+                        <option value="specialty">Specialty</option>
+                    </select>
+                </div>
+            </div>
+            <div class="hero-stats">
+                <div class="stat-item">
+                    <i class="fas fa-hospital"></i>
+                    <h3>100+</h3>
+                    <p>Hospitals</p>
+                </div>
+                <div class="stat-item">
+                    <i class="fas fa-user-md"></i>
+                    <h3>1000+</h3>
+                    <p>Doctors</p>
+                </div>
+                <div class="stat-item">
+                    <i class="fas fa-users"></i>
+                    <h3>50k+</h3>
+                    <p>Patients Served</p>
+                </div>
+            </div>
+        </div>
+        <div class="hero-shape"></div>
+    </section>
+
+    <!-- Featured Hospitals Section -->
+    <section class="featured-section">
+        <div class="container">
+            <div class="section-header">
+                <h2>Featured Hospitals</h2>
+                <p>Top-rated healthcare facilities in Delhi</p>
+            </div>
+            <div class="featured-grid">
+                <div class="hospital-card" data-category="private">
+                    <div class="card-image">
+                        <img src="https://images.unsplash.com/photo-1632833239869-a37e3a5806d2" alt="AIIMS Delhi">
+                        <div class="card-badge">Featured</div>
+                    </div>
+                    <div class="hospital-card-content">
+                        <div class="rating">
+                            <span class="stars">★★★★★</span>
+                            <span class="rating-count">4.8 (2000+ reviews)</span>
+                        </div>
+                        <h3>AIIMS Delhi</h3>
+                        <p class="location"><i class="fas fa-map-marker-alt"></i> Sri Aurobindo Marg, Ansari Nagar</p>
+                        <div class="hospital-details">
+                            <span class="badge"><i class="fas fa-clock"></i> 24/7</span>
+                            <span class="badge"><i class="fas fa-ambulance"></i> Emergency</span>
+                            <span class="badge"><i class="fas fa-hospital"></i> Multi-Specialty</span>
+                        </div>
+                        <div class="hospital-stats">
+                            <div class="stat">
+                                <i class="fas fa-bed"></i>
+                                <span>2000+ beds</span>
+                            </div>
+                            <div class="stat">
+                                <i class="fas fa-user-md"></i>
+                                <span>500+ doctors</span>
+                            </div>
+                        </div>
+                        <div class="card-actions">
+                            <button class="btn primary"><i class="fas fa-calendar-alt"></i> Book Appointment</button>
+                            <button class="btn secondary"><i class="fas fa-info-circle"></i> View Details</button>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="hospital-card">
+                    <img src="https://images.unsplash.com/photo-1586773860418-d37222d8fce3" alt="Safdarjung Hospital">
+                    <h3>Safdarjung Hospital</h3>
+                    <p>Vardhman Mahavir Medical College</p>
+                    <p>📍 Ansari Nagar West, New Delhi</p>
+                    <div class="hospital-details">
+                        <span class="badge">24/7</span>
+                        <span class="badge">Trauma Center</span>
+                    </div>
+                    <p class="phone">☎️ 011-26707444</p>
+                    <a href="#" class="btn">View Details</a>
+                </div>
+
+                <div class="hospital-card">
+                    <img src="https://images.unsplash.com/photo-1519494026892-80bbd2d6fd0d" alt="Apollo Hospital">
+                    <h3>Indraprastha Apollo</h3>
+                    <p>Apollo Hospitals Enterprise Ltd</p>
+                    <p>📍 Sarita Vihar, Delhi</p>
+                    <div class="hospital-details">
+                        <span class="badge">Private</span>
+                        <span class="badge">International</span>
+                    </div>
+                    <p class="phone">☎️ 011-71791090</p>
+                    <a href="#" class="btn">View Details</a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Map Section -->
+    <section class="map-section">
+        <div class="container">
+            <div class="section-header">
+                <h2>Hospital Locations</h2>
+                <p>Find hospitals near you</p>
+            </div>
+            <div id="map"></div>
+        </div>
+    </section>
+
+    <!-- Emergency Section -->
+    <section class="emergency-section" id="emergency">
+        <div class="container">
+            <div class="section-header">
+                <h2>Emergency Contacts</h2>
+                <p>24/7 Emergency Services</p>
+            </div>
+            <div class="emergency-grid">
+                <div class="emergency-card">
+                    <i class="fas fa-ambulance"></i>
+                    <h3>Ambulance</h3>
+                    <p class="phone">102</p>
+                    <button class="call-btn">Call Now</button>
+                </div>
+                <div class="emergency-card">
+                    <i class="fas fa-phone-alt"></i>
+                    <h3>Helpline</h3>
+                    <p class="phone">108</p>
+                    <button class="call-btn">Call Now</button>
+                </div>
+                <div class="emergency-card">
+                    <i class="fas fa-first-aid"></i>
+                    <h3>Medical Help</h3>
+                    <p class="phone">1800-111-545</p>
+                    <button class="call-btn">Call Now</button>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Modern Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-section">
+                    <h3>About Us</h3>
+                    <p>MediFind Delhi helps you locate the best healthcare facilities in Delhi NCR. We provide accurate information about hospitals, doctors, and emergency services.</p>
+                </div>
+                <div class="footer-section">
+                    <h3>Quick Links</h3>
+                    <ul>
+                        <li><a href="#home">Home</a></li>
+                        <li><a href="#hospitals">Hospitals</a></li>
+                        <li><a href="#emergency">Emergency</a></li>
+                        <li><a href="#contact">Contact</a></li>
+                    </ul>
+                </div>
+                <div class="footer-section">
+                    <h3>Contact Info</h3>
+                    <p><i class="fas fa-envelope"></i> info@medifind.com</p>
+                    <p><i class="fas fa-phone"></i> +91 11-2222-3333</p>
+                    <div class="social-links">
+                        <a href="#"><i class="fab fa-facebook"></i></a>
+                        <a href="#"><i class="fab fa-twitter"></i></a>
+                        <a href="#"><i class="fab fa-instagram"></i></a>
+                    </div>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2024 MediFind Delhi. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- JavaScript files at the end of body -->
+    <script src="hospital.js"></script>
+</body>
+</html> 
