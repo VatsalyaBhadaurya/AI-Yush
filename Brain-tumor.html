@@ -1,178 +1,324 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Brain Tumor Image Analysis</title>
-  <style>
-  /* styles.css */
-body {
-  font-family: 'Roboto', sans-serif;
-  margin: 0;
-  padding: 0;
-  background: #e6f7e6;
-  color: #333;
-}
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Brain Tumor Analysis | AIयुष</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.7.2/font/bootstrap-icons.css">
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #f8f9fa;
+        }
 
-.container {
-  text-align: center;
-  padding: 20px;
-}
+        .main-container {
+            max-width: 1000px;
+            margin: 2rem auto;
+            padding: 2rem;
+        }
 
-header {
-  background-color: #4caf50;
-  padding: 20px;
-  color: white;
-  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-}
+        .header {
+            text-align: center;
+            margin-bottom: 2rem;
+            padding: 1.5rem;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border-radius: 15px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        }
 
-header h1 {
-  margin: 0;
-  font-size: 2rem;
-}
+        .analysis-container {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 2rem;
+            margin-top: 2rem;
+        }
 
-main {
-  margin-top: 40px;
-}
+        .control-panel, .result-panel {
+            background: white;
+            padding: 2rem;
+            border-radius: 15px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
 
-.buttons button {
-  background-color: #2f855a;
-  color: white;
-  border: none;
-  border-radius: 8px;
-  padding: 10px 20px;
-  margin: 10px;
-  font-size: 1rem;
-  cursor: pointer;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-  transition: background-color 0.3s ease, transform 0.2s ease;
-}
+        .btn-group {
+            display: flex;
+            gap: 1rem;
+            margin-bottom: 1.5rem;
+        }
 
-.buttons button:hover {
-  background-color: #276749;
-  transform: translateY(-3px);
-}
+        .btn-custom {
+            padding: 0.75rem 1.5rem;
+            border-radius: 10px;
+            font-weight: 500;
+            transition: all 0.3s ease;
+        }
 
-.buttons button i {
-  margin-right: 8px;
-}
+        .btn-primary {
+            background: #667eea;
+            border: none;
+        }
 
-.upload {
-  margin-top: 20px;
-}
+        .btn-primary:hover {
+            background: #5a6fd1;
+            transform: translateY(-2px);
+        }
 
-.file-upload-label {
-  background-color: #4299e1;
-  color: white;
-  border: none;
-  border-radius: 8px;
-  padding: 10px 20px;
-  font-size: 1rem;
-  cursor: pointer;
-  display: inline-block;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-  transition: background-color 0.3s ease, transform 0.2s ease;
-}
+        #webcam-container {
+            width: 100%;
+            min-height: 300px;
+            border-radius: 10px;
+            overflow: hidden;
+            background: #f8f9fa;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
 
-.file-upload-label:hover {
-  background-color: #2b6cb0;
-  transform: translateY(-3px);
-}
+        #webcam-container canvas, #uploaded-image {
+            max-width: 100%;
+            height: auto;
+            border-radius: 10px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
 
-.file-upload-input {
-  display: none;
-}
+        #label-container {
+            margin-top: 1.5rem;
+            padding: 1rem;
+            background: #f8f9fa;
+            border-radius: 10px;
+        }
 
-footer {
-  margin-top: 40px;
-  font-size: 0.9rem;
-  color: #555;
-}
+        #label-container div {
+            padding: 0.5rem;
+            margin: 0.5rem 0;
+            background: white;
+            border-radius: 8px;
+            font-size: 1rem;
+            color: #444;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+        }
 
-footer a {
-  color: #4299e1;
-  text-decoration: none;
-  margin: 0 5px;
-}
+        .upload-section {
+            text-align: center;
+            padding: 1.5rem;
+            border: 2px dashed #667eea;
+            border-radius: 10px;
+            margin: 1rem 0;
+        }
 
-footer a:hover {
-  text-decoration: underline;
-}
+        .custom-upload-button {
+            display: inline-block;
+            padding: 0.75rem 1.5rem;
+            background: #667eea;
+            color: white;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
 
-  </style>
+        .custom-upload-button:hover {
+            background: #5a6fd1;
+            transform: translateY(-2px);
+        }
+
+        #imageUpload {
+            display: none;
+        }
+
+        .info-box {
+            background: #e8eaf6;
+            padding: 1rem;
+            border-radius: 10px;
+            margin-top: 1rem;
+            font-size: 0.9rem;
+            color: #555;
+        }
+
+        @media (max-width: 768px) {
+            .analysis-container {
+                grid-template-columns: 1fr;
+            }
+            
+            .main-container {
+                padding: 1rem;
+            }
+        }
+    </style>
 </head>
 <body>
-  <div class="container">
-    <header>
-      <h1>Brain Tumor Image Analysis</h1>
-    </header>
-    <main>
-      <div class="buttons">
-        <button id="start-webcam"><i class="icon-camera"></i> Start Webcam</button>
-        <button id="stop-webcam"><i class="icon-camera-off"></i> Stop Webcam</button>
-        <button id="capture"><i class="icon-snapshot"></i> Capture</button>
-      </div>
-      <div class="upload">
-        <label for="file-upload" class="file-upload-label">
-          <i class="icon-upload"></i> Choose File
-        </label>
-        <input type="file" id="file-upload" class="file-upload-input" accept=".jpg,.png,.pdf">
-      </div>
-    </main>
-    <footer>
-      <p>© 2025 Brain Tumor Analysis. <a href="#">Privacy Policy</a> | <a href="#">Contact Us</a></p>
-    </footer>
-  </div>
-  <script>
-  // script.js
-const startWebcamButton = document.getElementById('start-webcam');
-const stopWebcamButton = document.getElementById('stop-webcam');
-const captureButton = document.getElementById('capture');
-const webcamElement = document.getElementById('webcam');
+    <div class="main-container">
+        <div class="header">
+            <h1><i class="bi bi-brain"></i> Brain Tumor Analysis</h1>
+            <p class="mb-0">Advanced AI-powered brain tumor detection system</p>
+        </div>
 
-let webcamStream = null;
+        <div class="analysis-container">
+            <div class="control-panel">
+                <h3 class="mb-4">Image Capture</h3>
+                <div class="btn-group">
+                    <button type="button" class="btn btn-custom btn-primary" onclick="startWebcam()">
+                        <i class="bi bi-camera-video"></i> Start Camera
+                    </button>
+                    <button type="button" class="btn btn-custom btn-danger" onclick="stopWebcam()">
+                        <i class="bi bi-camera-video-off"></i> Stop Camera
+                    </button>
+                    <button type="button" class="btn btn-custom btn-success" onclick="captureWebcam()">
+                        <i class="bi bi-camera"></i> Capture
+                    </button>
+                </div>
 
-// Start the webcam
-startWebcamButton.addEventListener('click', async () => {
-  try {
-    webcamStream = await navigator.mediaDevices.getUserMedia({ video: true });
-    webcamElement.srcObject = webcamStream;
-  } catch (err) {
-    alert('Error starting webcam: ' + err.message);
-  }
-});
+                <div class="upload-section">
+                    <label for="imageUpload" class="custom-upload-button">
+                        <i class="bi bi-upload"></i> Upload MRI Scan
+                    </label>
+                    <input type="file" id="imageUpload" accept="image/*" onchange="uploadPhoto()">
+                    <p class="mt-2 text-muted">Supported formats: JPG, PNG</p>
+                </div>
 
-// Stop the webcam
-stopWebcamButton.addEventListener('click', () => {
-  if (webcamStream) {
-    const tracks = webcamStream.getTracks();
-    tracks.forEach((track) => track.stop());
-    webcamElement.srcObject = null;
-    webcamStream = null;
-  } else {
-    alert('Webcam is not running.');
-  }
-});
+                <div id="webcam-container" class="mt-3"></div>
+                <img id="uploaded-image" style="display:none;">
+            </div>
 
-// Capture image (Optional)
-captureButton.addEventListener('click', () => {
-  if (!webcamStream) {
-    alert('Webcam is not running.');
-    return;
-  }
+            <div class="result-panel">
+                <h3 class="mb-4">Analysis Results</h3>
+                <div id="label-container">
+                    <div class="text-center text-muted">
+                        <i class="bi bi-arrow-left-circle"></i>
+                        Start by capturing or uploading an image
+                    </div>
+                </div>
 
-  const canvas = document.createElement('canvas');
-  canvas.width = webcamElement.videoWidth;
-  canvas.height = webcamElement.videoHeight;
+                <div class="info-box">
+                    <h5><i class="bi bi-info-circle"></i> About the Analysis</h5>
+                    <p class="mb-0">
+                        This system uses advanced machine learning to analyze brain MRI scans and 
+                        detect potential tumors. The results show probability percentages for different 
+                        classifications.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
 
-  const context = canvas.getContext('2d');
-  context.drawImage(webcamElement, 0, 0, canvas.width, canvas.height);
+    <script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs@latest/dist/tf.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@teachablemachine/image@latest/dist/teachablemachine-image.min.js"></script>
+    <script type="text/javascript">
+        const URL = "https://teachablemachine.withgoogle.com/models/SFFMqOEsS/";
 
-  // For demonstration: Display the captured image in a new tab
-  const imageUrl = canvas.toDataURL('image/png');
-  window.open(imageUrl);
-});
+        let model, webcam, labelContainer, maxPredictions;
+        let webcamRunning = false;
 
-  </script>
+        // Load the model
+        async function loadModel() {
+            const modelURL = URL + "model.json";
+            const metadataURL = URL + "metadata.json";
+
+            model = await tmImage.load(modelURL, metadataURL);
+            maxPredictions = model.getTotalClasses();
+
+            labelContainer = document.getElementById("label-container");
+            for (let i = 0; i < maxPredictions; i++) {
+                labelContainer.appendChild(document.createElement("div"));
+            }
+        }
+
+        // Start the webcam
+        async function startWebcam() {
+            if (!model) await loadModel();
+            if (webcamRunning) return;
+
+            const flip = true; // Flip webcam horizontally
+            webcam = new tmImage.Webcam(300, 300, flip);
+            await webcam.setup();
+            await webcam.play();
+            document.getElementById("webcam-container").appendChild(webcam.canvas);
+            webcamRunning = true;
+
+            window.requestAnimationFrame(webcamLoop);
+        }
+
+        // Stop the webcam
+        function stopWebcam() {
+            if (webcam && webcamRunning) {
+                webcam.stop();
+                webcamRunning = false;
+                document.getElementById("webcam-container").innerHTML = '';
+            }
+        }
+
+        // Capture the webcam image
+        async function captureWebcam() {
+            if (webcam && webcamRunning) {
+                const canvas = document.createElement("canvas");
+                canvas.width = 300;
+                canvas.height = 300;
+                const ctx = canvas.getContext("2d");
+                ctx.drawImage(webcam.canvas, 0, 0, canvas.width, canvas.height);
+
+                document.getElementById("webcam-container").appendChild(canvas);
+
+                const prediction = await model.predict(canvas);
+
+                // Display predictions for all classes
+                labelContainer.innerHTML = ''; // Clear previous predictions
+                prediction.forEach((p) => {
+                    const classPrediction = `${p.className}: ${(p.probability * 100).toFixed(2)}%`;
+                    labelContainer.innerHTML += `<div>${classPrediction}</div>`;
+                });
+            }
+        }
+
+        // Webcam loop for live predictions
+        async function webcamLoop() {
+            if (webcamRunning) {
+                webcam.update();
+                window.requestAnimationFrame(webcamLoop);
+            }
+        }
+
+        // Upload and predict image
+        async function uploadPhoto() {
+            if (!model) await loadModel();
+
+            const imageElement = document.getElementById("uploaded-image");
+            const fileInput = document.getElementById("imageUpload");
+            const file = fileInput.files[0];
+
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = async function (event) {
+                    imageElement.src = event.target.result;
+                    imageElement.style.display = "block";
+
+                    // Ensure the image is resized for consistent predictions
+                    const resizedCanvas = document.createElement("canvas");
+                    resizedCanvas.width = 224; // Match the size of the model input
+                    resizedCanvas.height = 224;
+                    const ctx = resizedCanvas.getContext("2d");
+
+                    // Draw the uploaded image to the resized canvas
+                    imageElement.onload = async function () {
+                        ctx.drawImage(imageElement, 0, 0, 224, 224);
+
+                        // Predict using the resized canvas
+                        const prediction = await model.predict(resizedCanvas);
+
+                        // Display predictions for all classes
+                        labelContainer.innerHTML = ''; // Clear previous predictions
+                        prediction.forEach((p) => {
+                            const classPrediction = `${p.className}: ${(p.probability * 100).toFixed(2)}%`;
+                            labelContainer.innerHTML += `<div>${classPrediction}</div>`;
+                        });
+                    };
+                };
+                reader.readAsDataURL(file);
+            }
+        }
+
+        // Load the model initially
+        loadModel();
+    </script>
 </body>
 </html>

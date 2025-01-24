@@ -3,185 +3,162 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Doctor Dashboard - HealthCare Hub</title>
-    <link rel="stylesheet" href="styles.css">
-    <link rel="stylesheet" href="dashboard.css">
+    <title>Doctor Dashboard - AIयुष</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <style>
-        /* Disease Prediction */
-.prediction-container {
-    background: white;
-    padding: 2rem;
-    border-radius: 10px;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-}
+        :root {
+            --primary-color: #007bff; /* Blue for healthcare */
+            --secondary-color: #6c757d; /* Gray for a neutral tone */
+            --light-bg: #f8f9fa; /* Light background for a clean look */
+            --text-color: #343a40; /* Dark text for readability */
+            --hover-color: #0056b3; /* Darker blue for hover effects */
+        }
 
-.model-selection {
-    margin-bottom: 2rem;
-}
+        body {
+            font-family: 'Roboto', sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: var(--light-bg);
+            color: var(--text-color);
+        }
 
-.model-selection select {
-    width: 100%;
-    padding: 0.8rem;
-    border: 1px solid #ddd;
-    border-radius: 5px;
-    margin-top: 0.5rem;
-}
+        header {
+            background: linear-gradient(90deg, var(--primary-color), var(--secondary-color));
+            color: white;
+            padding: 1rem 2rem;
+            text-align: center;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        }
 
-.prediction-form {
-    margin-bottom: 2rem;
-}
+        header h1 {
+            margin: 0;
+            font-size: 2.5rem;
+        }
 
-.predict-btn {
-    background-color: var(--secondary-color);
-    color: white;
-    padding: 1rem 2rem;
-    border: none;
-    border-radius: 5px;
-    cursor: pointer;
-    display: flex;
-    align-items: center;
-    gap: 0.5rem;
-}
+        .section-header {
+            text-align: center;
+            margin: 2rem 0;
+            color: var(white);
+        }
 
-.disease-buttons {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-    gap: 1.5rem;
-    padding: 1rem;
-}
+        .section-header h2 {
+            font-size: 2rem;
+            margin: 0;
+        }
 
-.disease-btn {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 1rem;
-    padding: 1.5rem;
-    border: none;
-    border-radius: 10px;
-    background-color: var(--primary-color);
-    background-color:#666;
-    font-size: 1.1rem;
-    cursor: pointer;
-    transition: transform 0.3s ease, box-shadow 0.3s ease;
-    color: white;
-}
+        .prediction-container {
+            background: white;
+            padding: 2rem;
+            border-radius: 10px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+            max-width: 1200px;
+            margin: 0 auto;
+        }
 
-.disease-btn:hover {
-    transform: translateY(-5px);
-    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
-}
+        .disease-buttons {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1.5rem;
+            padding: 1rem;
+        }
 
-.disease-btn i {
-    font-size: 1.5rem;
-}
+        .disease-btn {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 2rem;
+            border: none;
+            border-radius: 10px;
+            background: var(--primary-color);
+            color: white;
+            font-size: 1.2rem;
+            cursor: pointer;
+            transition: transform 0.3s ease, box-shadow 0.3s ease, background-color 0.3s ease;
+            text-align: center;
+        }
 
-.prediction-results {
-    border-top: 1px solid #eee;
-    padding-top: 2rem;
-}
+        .disease-btn i {
+            font-size: 2rem;
+            margin-bottom: 1rem;
+        }
 
-.result-item {
-    margin-bottom: 1.5rem;
-}
+        .disease-btn:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+            background: var(--hover-color);
+        }
 
-.result-item h4 {
-    margin-bottom: 0.5rem;
-    color: var(--primary-color);
-}
+        .prediction-results {
+            border-top: 2px solid var(--primary-color);
+            padding-top: 2rem;
+            margin-top: 2rem;
+        }
 
-.prediction-positive {
-    color: #dc3545;
-    font-weight: bold;
-}
+        .result-item {
+            margin-bottom: 1.5rem;
+            font-size: 1.1rem;
+        }
 
-.prediction-negative {
-    color: #28a745;
-    font-weight: bold;
-}
+        .result-item h4 {
+            margin: 0 0 0.5rem;
+            color: var(--secondary-color);
+        }
 
-.loading {
-    text-align: center;
-    padding: 2rem;
-  color:#666;
-}
-/* Common Elements */
-.add-btn {
-    background-color: var(--secondary-color);
-    color: white;
-    padding: 0.8rem 1.5rem;
-    border: none;
-    border-radius: 5px;
-    cursor: pointer;
-    display: flex;
-    align-items: center;
-    gap: 0.5rem;
-}
+        @media (max-width: 768px) {
+            header h1 {
+                font-size: 2rem;
+            }
 
-.view-btn {
-    background-color: var(--secondary-color);
-    color: white;
-    padding: 0.5rem 1rem;
-    border: none;
-    border-radius: 5px;
-    cursor: pointer;
-}
+            .section-header h2 {
+                font-size: 1.8rem;
+            }
 
-.status {
-    padding: 0.4rem 0.8rem;
-    border-radius: 20px;
-    font-size: 0.9rem;
-}
+            .disease-btn {
+                padding: 1.5rem;
+                font-size: 1rem;
+            }
 
-.status.pending {
-    background-color: #fff3cd;
-    color: #856404;
-}
-
-.status.confirmed {
-    background-color: #d4edda;
-    color: #155724;
-}
-
-.status.cancelled {
-    background-color: #f8d7da;
-    color: #721c24;
-}
-
+            .disease-btn i {
+                font-size: 1.5rem;
+            }
+        }
     </style>
+</head>
+<body>
+    <header>
+        <h1>Doctor Dashboard - AIयुष</h1>
+    </header>
 
+    <section id="disease-prediction">
+        <header class="section-header">
+            <h2>Disease Prediction</h2>
+        </header>
 
-        <!-- Disease Prediction Tab -->
-        <section id="disease-prediction" class="tab-content">
-            <header class="section-header">
-                <h2>Disease Prediction</h2>
-            </header>
-            <div class="prediction-container">
-                <div class="disease-buttons">
-                    <button onclick="window.open('retina.html', '_blank')" class="disease-btn">
-                        <i class="fas fa-heartbeat"></i>
-                        Retinal Analysis
-                    </button>
-                    <button onclick="window.open('arthritis.html', '_blank')" class="disease-btn">
-                        <i class="fas fa-heart"></i>
-                        Arthritis Prediction
-                    </button>
-                    <button onclick="window.open('goiter.html', '_blank')" class="disease-btn">
-                        <i class="fas fa-procedures"></i>
-                        Hypothyroidism Prediction
-                    </button>
-                    <button onclick="window.open('lungCancer.html', '_blank')" class="disease-btn">
-                        <i class="fas fa-kidneys"></i>
-                        Lung Cancer Prediction
-                    </button>
-                    <button onclick="window.open('brain-tumor.html', '_blank')" class="disease-btn">
-                        <i class="fas fa-ribbon"></i>
-                        Brain Tumor Prediction
-                    </button>
-                </div>
+        <div class="prediction-container">
+            <div class="disease-buttons">
+                <button onclick="window.open('retina.html', '_blank')" class="disease-btn">
+                    <i class="fas fa-heartbeat"></i>
+                    Retinal Analysis
+                </button>
+                <button onclick="window.open('arthritis.html', '_blank')" class="disease-btn">
+                    <i class="fas fa-heart"></i>
+                    Arthritis Prediction
+                </button>
+                <button onclick="window.open('goiter.html', '_blank')" class="disease-btn">
+                    <i class="fas fa-procedures"></i>
+                    Hypothyroidism Prediction
+                </button>
+                <button onclick="window.open('lungCancer.html', '_blank')" class="disease-btn">
+                    <i class="fas fa-lungs-virus"></i>
+                    Lung Cancer Prediction
+                </button>
+                <button onclick="window.open('brain-tumor.html', '_blank')" class="disease-btn">
+                    <i class="fas fa-brain"></i>
+                    Brain Tumor Prediction
+                </button>
             </div>
-        </section>
-
-     
+        </div>
+    </section>
 </body>
 </html>

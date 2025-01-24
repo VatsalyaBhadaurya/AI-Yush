@@ -3,400 +3,243 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Goiter Detection | AI Medical Analysis</title>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <title>Goiter Analysis | AIयुष</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.7.2/font/bootstrap-icons.css">
     <style>
-        :root {
-            --primary-color: #3b82f6;
-            --primary-dark: #1d4ed8;
-            --secondary-color: #64748b;
-            --background-color: #f8fafc;
-            --surface-color: #ffffff;
-            --text-color: #1e293b;
-            --error-color: #ef4444;
-            --success-color: #22c55e;
-            --border-radius: 12px;
-            --shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.05);
-            --shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1);
-            --shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.1);
-        }
-        
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-
-        @keyframes pulse {
-            0%, 100% { transform: scale(1); }
-            50% { transform: scale(1.05); }
-        }
-
-        @keyframes fadeIn {
-            from { opacity: 0; }
-            to { opacity: 1; }
-        }
-
-        @keyframes slideIn {
-            from { transform: translateY(20px); opacity: 0; }
-            to { transform: translateY(0); opacity: 1; }
-        }
-
         body {
-            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
-            background-color: var(--background-color);
-            color: var(--text-color);
-            line-height: 1.6;
-            padding: 2rem;
-            min-height: 100vh;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #f8f9fa;
         }
 
-        .container {
-            max-width: 1100px;
-            margin: 0 auto;
-            padding: 2.5rem;
-            background: var(--surface-color);
-            border-radius: var(--border-radius);
-            box-shadow: var(--shadow-lg);
-            animation: fadeIn 0.5s ease-out;
+        .main-container {
+            max-width: 1000px;
+            margin: 2rem auto;
+            padding: 2rem;
         }
 
         .header {
             text-align: center;
-            margin-bottom: 3rem;
-            padding-bottom: 2rem;
-            border-bottom: 2px solid #e2e8f0;
+            margin-bottom: 2rem;
+            padding: 1.5rem;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border-radius: 15px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
         }
 
-        h1 {
-            font-size: 2.5rem;
-            color: var(--primary-color);
-            margin-bottom: 1rem;
-            font-weight: 800;
+        .analysis-container {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 2rem;
+            margin-top: 2rem;
         }
 
-        .subtitle {
-            color: var(--secondary-color);
-            font-size: 1.1rem;
-            max-width: 600px;
-            margin: 0 auto;
+        .control-panel, .result-panel {
+            background: white;
+            padding: 2rem;
+            border-radius: 15px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
         }
 
-        .controls {
+        .btn-group {
             display: flex;
             gap: 1rem;
-            flex-wrap: wrap;
-            justify-content: center;
-            margin-bottom: 2rem;
+            margin-bottom: 1.5rem;
         }
 
-        .btn {
-            padding: 0.875rem 1.75rem;
-            font-size: 1rem;
-            font-weight: 600;
-            cursor: pointer;
-            background-color: var(--primary-color);
-            color: white;
+        .btn-custom {
+            padding: 0.75rem 1.5rem;
+            border-radius: 10px;
+            font-weight: 500;
+            transition: all 0.3s ease;
+        }
+
+        .btn-primary {
+            background: #667eea;
             border: none;
-            border-radius: var(--border-radius);
-            transition: all 0.2s ease;
-            display: flex;
-            align-items: center;
-            gap: 0.5rem;
         }
 
-        .btn:hover {
-            background-color: var(--primary-dark);
+        .btn-primary:hover {
+            background: #5a6fd1;
             transform: translateY(-2px);
-            box-shadow: var(--shadow);
-        }
-
-        .btn:active {
-            transform: translateY(0);
-        }
-
-        .btn i {
-            font-size: 1.1rem;
-        }
-
-        .btn-secondary {
-            background-color: var(--secondary-color);
-        }
-
-        .btn-secondary:hover {
-            background-color: #475569;
-        }
-
-        .file-upload {
-            display: inline-block;
-            position: relative;
-        }
-
-        .file-upload input[type="file"] {
-            display: none;
-        }
-
-        .file-upload label {
-            padding: 0.875rem 1.75rem;
-            font-size: 1rem;
-            font-weight: 600;
-            cursor: pointer;
-            background-color: var(--secondary-color);
-            color: white;
-            border-radius: var(--border-radius);
-            transition: all 0.2s ease;
-            display: flex;
-            align-items: center;
-            gap: 0.5rem;
-        }
-
-        .file-upload label:hover {
-            background-color: #475569;
-            transform: translateY(-2px);
-            box-shadow: var(--shadow);
-        }
-
-        .content-area {
-            display: grid;
-            grid-template-columns: 1fr;
-            gap: 2rem;
-            margin: 2rem 0;
-        }
-
-        .preview-section {
-            background: #f1f5f9;
-            padding: 2rem;
-            border-radius: var(--border-radius);
-            text-align: center;
-        }
-
-        .preview-section h3 {
-            color: var(--secondary-color);
-            margin-bottom: 1rem;
-            font-size: 1.2rem;
         }
 
         #webcam-container {
-            margin: 1rem auto;
-            position: relative;
-        }
-
-        #webcam-container canvas, 
-        #uploaded-image {
-            max-width: 450px;
             width: 100%;
-            height: auto;
-            border-radius: var(--border-radius);
-            box-shadow: var(--shadow);
-            margin: 1rem auto;
-            display: block;
-            animation: fadeIn 0.3s ease-out;
-        }
-
-        .loading-overlay {
-            position: fixed;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            background: rgba(0, 0, 0, 0.7);
-            display: none;
-            justify-content: center;
+            min-height: 300px;
+            border-radius: 10px;
+            overflow: hidden;
+            background: #f8f9fa;
+            display: flex;
             align-items: center;
-            z-index: 1000;
+            justify-content: center;
         }
 
-        .loading-spinner {
-            width: 50px;
-            height: 50px;
-            border: 5px solid #f3f3f3;
-            border-top: 5px solid var(--primary-color);
-            border-radius: 50%;
-            animation: spin 1s linear infinite;
-        }
-
-        @keyframes spin {
-            0% { transform: rotate(0deg); }
-            100% { transform: rotate(360deg); }
+        #webcam-container canvas, #uploaded-image {
+            max-width: 100%;
+            height: auto;
+            border-radius: 10px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
         }
 
         #label-container {
-            margin-top: 2rem;
-            animation: slideIn 0.3s ease-out;
+            margin-top: 1.5rem;
+            padding: 1rem;
+            background: #f8f9fa;
+            border-radius: 10px;
         }
 
-        .result-card {
+        #label-container div {
+            padding: 0.5rem;
+            margin: 0.5rem 0;
             background: white;
-            padding: 1.25rem;
-            border-radius: var(--border-radius);
-            margin: 0.75rem 0;
-            box-shadow: var(--shadow-sm);
-            transition: all 0.2s ease;
-            border: 1px solid #e2e8f0;
+            border-radius: 8px;
+            font-size: 1rem;
+            color: #444;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
         }
 
-        .result-card:hover {
-            transform: translateY(-2px);
-            box-shadow: var(--shadow);
+        .upload-section {
+            text-align: center;
+            padding: 1.5rem;
+            border: 2px dashed #667eea;
+            border-radius: 10px;
+            margin: 1rem 0;
         }
 
-        .status-badge {
+        .custom-upload-button {
             display: inline-block;
-            padding: 0.25rem 0.75rem;
-            border-radius: 9999px;
-            font-size: 0.875rem;
-            font-weight: 500;
-            margin-bottom: 0.5rem;
+            padding: 0.75rem 1.5rem;
+            background: #667eea;
+            color: white;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: all 0.3s ease;
         }
 
-        .status-badge.processing {
-            background-color: #dbeafe;
-            color: #1e40af;
+        .custom-upload-button:hover {
+            background: #5a6fd1;
+            transform: translateY(-2px);
         }
 
-        .status-badge.ready {
-            background-color: #dcfce7;
-            color: #166534;
+        #imageUpload {
+            display: none;
         }
-        #google_translate_element{
-    position: absolute;
-     top:10px;
-    right: 36rem; 
+
+        .info-box {
+            background: #e8eaf6;
+            padding: 1rem;
+            border-radius: 10px;
+            margin-top: 1rem;
+            font-size: 0.9rem;
+            color: #555;
         }
+
         @media (max-width: 768px) {
-            body {
-                padding: 1rem;
+            .analysis-container {
+                grid-template-columns: 1fr;
             }
             
-            .container {
-                padding: 1.5rem;
-            }
-
-            h1 {
-                font-size: 2rem;
-            }
-
-            .controls {
-                flex-direction: column;
-                align-items: stretch;
-            }
-
-            .btn, .file-upload label {
-                width: 100%;
-                justify-content: center;
-            }
-
-            .preview-section {
+            .main-container {
                 padding: 1rem;
             }
         }
     </style>
 </head>
-<div id="google_translate_element"></div>
 <body>
-    <div class="container">
+    <div class="main-container">
         <div class="header">
-            <h1>Goiter Detection</h1>
-            <p class="subtitle">Advanced AI-powered medical image analysis for detecting goiter conditions</p>
-        </div>
-        
-        <div class="controls">
-            <button type="button" onclick="startWebcam()" class="btn">
-                <i class="fas fa-camera"></i>
-                Start Camera
-            </button>
-            <button type="button" onclick="stopWebcam()" class="btn btn-secondary">
-                <i class="fas fa-stop"></i>
-                Stop Camera
-            </button>
-            <button type="button" onclick="captureWebcam()" class="btn">
-                <i class="fas fa-camera-retro"></i>
-                Capture Image
-            </button>
-            <div class="file-upload">
-                <label for="imageUpload">
-                    <i class="fas fa-upload"></i>
-                    Upload Image
-                </label>
-                <input type="file" id="imageUpload" accept="image/*" onchange="uploadPhoto()">
-            </div>
+            <h1><i class="bi bi-activity"></i> Goiter Analysis</h1>
+            <p class="mb-0">Advanced AI-powered goiter detection system</p>
         </div>
 
-        <div class="content-area">
-            <div class="preview-section">
-                <h3>Image Preview</h3>
-                <div id="webcam-container"></div>
-                <div class="image-preview">
-                    <img id="uploaded-image" style="display:none;">
+        <div class="analysis-container">
+            <div class="control-panel">
+                <h3 class="mb-4">Image Capture</h3>
+                <div class="btn-group">
+                    <button type="button" class="btn btn-custom btn-primary" onclick="startWebcam()">
+                        <i class="bi bi-camera-video"></i> Start Camera
+                    </button>
+                    <button type="button" class="btn btn-custom btn-danger" onclick="stopWebcam()">
+                        <i class="bi bi-camera-video-off"></i> Stop Camera
+                    </button>
+                    <button type="button" class="btn btn-custom btn-success" onclick="captureWebcam()">
+                        <i class="bi bi-camera"></i> Capture
+                    </button>
+                </div>
+
+                <div class="upload-section">
+                    <label for="imageUpload" class="custom-upload-button">
+                        <i class="bi bi-upload"></i> Upload Image
+                    </label>
+                    <input type="file" id="imageUpload" accept="image/*" onchange="uploadPhoto()">
+                    <p class="mt-2 text-muted">Supported formats: JPG, PNG</p>
+                </div>
+
+                <div id="webcam-container" class="mt-3"></div>
+                <img id="uploaded-image" style="display:none;">
+            </div>
+
+            <div class="result-panel">
+                <h3 class="mb-4">Analysis Results</h3>
+                <div id="label-container">
+                    <div class="text-center text-muted">
+                        <i class="bi bi-arrow-left-circle"></i>
+                        Start by capturing or uploading an image
+                    </div>
+                </div>
+
+                <div class="info-box">
+                    <h5><i class="bi bi-info-circle"></i> About Goiter Analysis</h5>
+                    <p class="mb-0">
+                        This system uses advanced machine learning to analyze neck images and 
+                        detect potential goiter conditions. The results show probability percentages 
+                        for different classifications.
+                    </p>
                 </div>
             </div>
-            
-            <div id="label-container"></div>
         </div>
     </div>
 
-    <div class="loading-overlay">
-        <div class="loading-spinner"></div>
-    </div>
-
-    
     <script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs@latest/dist/tf.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/@teachablemachine/image@latest/dist/teachablemachine-image.min.js"></script>
     <script type="text/javascript">
         const URL = "https://teachablemachine.withgoogle.com/models/Duy3XycBa/";
+
         let model, webcam, labelContainer, maxPredictions;
         let webcamRunning = false;
 
-        const loadingOverlay = document.querySelector('.loading-overlay');
-
-        function showLoading() {
-            loadingOverlay.style.display = 'flex';
-        }
-
-        function hideLoading() {
-            loadingOverlay.style.display = 'none';
-        }
-
+        // Load the model
         async function loadModel() {
-            showLoading();
-            try {
-                const modelURL = URL + "model.json";
-                const metadataURL = URL + "metadata.json";
+            const modelURL = URL + "model.json";
+            const metadataURL = URL + "metadata.json";
 
-                model = await tmImage.load(modelURL, metadataURL);
-                maxPredictions = model.getTotalClasses();
+            model = await tmImage.load(modelURL, metadataURL);
+            maxPredictions = model.getTotalClasses();
 
-                labelContainer = document.getElementById("label-container");
-                labelContainer.innerHTML = '<div class="status-badge ready">Model Ready</div>';
-            } catch (error) {
-                console.error('Error loading model:', error);
-                labelContainer.innerHTML = `<div class="result-card" style="color: var(--error-color)">
-                    Error loading model. Please try again later.
-                </div>`;
-            } finally {
-                hideLoading();
+            labelContainer = document.getElementById("label-container");
+            for (let i = 0; i < maxPredictions; i++) {
+                labelContainer.appendChild(document.createElement("div"));
             }
         }
 
+        // Start the webcam
         async function startWebcam() {
             if (!model) await loadModel();
             if (webcamRunning) return;
 
-            try {
-                const flip = true;
-                webcam = new tmImage.Webcam(450, 450, flip);
-                await webcam.setup();
-                await webcam.play();
-                document.getElementById("webcam-container").appendChild(webcam.canvas);
-                webcamRunning = true;
+            const flip = true; // Flip webcam horizontally
+            webcam = new tmImage.Webcam(300, 300, flip);
+            await webcam.setup();
+            await webcam.play();
+            document.getElementById("webcam-container").appendChild(webcam.canvas);
+            webcamRunning = true;
 
-                window.requestAnimationFrame(webcamLoop);
-            } catch (error) {
-                console.error('Error starting webcam:', error);
-                alert('Unable to access camera. Please make sure you have granted camera permissions.');
-            }
+            window.requestAnimationFrame(webcamLoop);
         }
 
+        // Stop the webcam
         function stopWebcam() {
             if (webcam && webcamRunning) {
                 webcam.stop();
@@ -405,28 +248,29 @@
             }
         }
 
+        // Capture the webcam image
         async function captureWebcam() {
             if (webcam && webcamRunning) {
-                showLoading();
-                try {
-                    const canvas = document.createElement("canvas");
-                    canvas.width = 450;
-                    canvas.height = 450;
-                    const ctx = canvas.getContext("2d");
-                    ctx.drawImage(webcam.canvas, 0, 0, canvas.width, canvas.height);
+                const canvas = document.createElement("canvas");
+                canvas.width = 300;
+                canvas.height = 300;
+                const ctx = canvas.getContext("2d");
+                ctx.drawImage(webcam.canvas, 0, 0, canvas.width, canvas.height);
 
-                    document.getElementById("webcam-container").appendChild(canvas);
-                    
-                    await predictImage(canvas);
-                } catch (error) {
-                    console.error('Error capturing image:', error);
-                    showError('Error processing image');
-                } finally {
-                    hideLoading();
-                }
+                document.getElementById("webcam-container").appendChild(canvas);
+
+                const prediction = await model.predict(canvas);
+
+                // Display predictions for all classes
+                labelContainer.innerHTML = ''; // Clear previous predictions
+                prediction.forEach((p) => {
+                    const classPrediction = `${p.className}: ${(p.probability * 100).toFixed(2)}%`;
+                    labelContainer.innerHTML += `<div>${classPrediction}</div>`;
+                });
             }
         }
 
+        // Webcam loop for live predictions
         async function webcamLoop() {
             if (webcamRunning) {
                 webcam.update();
@@ -434,6 +278,7 @@
             }
         }
 
+        // Upload and predict image
         async function uploadPhoto() {
             if (!model) await loadModel();
 
@@ -442,83 +287,38 @@
             const file = fileInput.files[0];
 
             if (file) {
-                showLoading();
-                try {
-                    const reader = new FileReader();
-                    reader.onload = async function (event) {
-                        imageElement.src = event.target.result;
-                        imageElement.style.display = "block";
+                const reader = new FileReader();
+                reader.onload = async function (event) {
+                    imageElement.src = event.target.result;
+                    imageElement.style.display = "block";
 
-                        imageElement.onload = async function () {
-                            const canvas = document.createElement("canvas");
-                            canvas.width = 224;
-                            canvas.height = 224;
-                            const ctx = canvas.getContext("2d");
-                            ctx.drawImage(imageElement, 0, 0, 224, 224);
-                            
-                            await predictImage(canvas);
-                        };
+                    // Ensure the image is resized for consistent predictions
+                    const resizedCanvas = document.createElement("canvas");
+                    resizedCanvas.width = 224; // Match the size of the model input
+                    resizedCanvas.height = 224;
+                    const ctx = resizedCanvas.getContext("2d");
+
+                    // Draw the uploaded image to the resized canvas
+                    imageElement.onload = async function () {
+                        ctx.drawImage(imageElement, 0, 0, 224, 224);
+
+                        // Predict using the resized canvas
+                        const prediction = await model.predict(resizedCanvas);
+
+                        // Display predictions for all classes
+                        labelContainer.innerHTML = ''; // Clear previous predictions
+                        prediction.forEach((p) => {
+                            const classPrediction = `${p.className}: ${(p.probability * 100).toFixed(2)}%`;
+                            labelContainer.innerHTML += `<div>${classPrediction}</div>`;
+                        });
                     };
-                    reader.readAsDataURL(file);
-                } catch (error) {
-                    console.error('Error processing uploaded image:', error);
-                    showError('Error processing uploaded image');
-                } finally {
-                    hideLoading();
-                }
+                };
+                reader.readAsDataURL(file);
             }
-        }
-
-        async function predictImage(imageElement) {
-            labelContainer.innerHTML = '<div class="status-badge processing">Processing Image...</div>';
-            
-            try {
-                const prediction = await model.predict(imageElement);
-                
-                labelContainer.innerHTML = '';
-                prediction.forEach((p) => {
-                    const probability = (p.probability * 100).toFixed(2);
-                    const resultClass = probability > 50 ? 'high-probability' : 'low-probability';
-                    
-                    labelContainer.innerHTML += `
-                        <div class="result-card ${resultClass}">
-                            <strong>${p.className}:</strong> ${probability}%
-                            <div class="probability-bar" style="
-                                width: ${probability}%;
-                                height: 4px;
-                                background: ${probability > 50 ? 'var(--primary-color)' : 'var(--secondary-color)'};
-                                margin-top: 8px;
-                                border-radius: 2px;
-                                transition: width 0.3s ease-out;
-                            "></div>
-                        </div>
-                    `;
-                });
-            } catch (error) {
-                showError('Error analyzing image');
-            }
-        }
-
-        function showError(message) {
-            labelContainer.innerHTML = `
-                <div class="result-card" style="color: var(--error-color)">
-                    <i class="fas fa-exclamation-circle"></i> ${message}
-                </div>
-            `;
         }
 
         // Load the model initially
         loadModel();
-
-        function googleTranslateElementInit()
-{
-    new google.translate.TranslateElement(
-        {pageLanguage:'en'},
-        'google_translate_element'
-    );
-}
     </script>
-   <script type="text/javascript" src="//translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script>
-
 </body>
 </html>

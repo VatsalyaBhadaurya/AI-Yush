@@ -3,183 +3,203 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Retina Analysis | AI Medical Analysis</title>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <title>Diabetic Retinopathy Analysis |AIयुष</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.7.2/font/bootstrap-icons.css">
     <style>
         body {
-            font-family: Arial, sans-serif;
-            text-align: center;
-            padding: 20px;
-        }
-        #webcam-container {
-            margin: 20px auto;
-        }
-        #google_translate_element {
-            margin: 0;
-            padding: 0;
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            z-index: 9999;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #f8f9fa;
         }
 
-        button {
-            padding: 10px 20px;
-            font-size: 16px;
-            cursor: pointer;
-            background-color: #4CAF50;
-            color: white;
-            border: none;
-            border-radius: 5px;
-            margin: 10px;
+        .main-container {
+            max-width: 1000px;
+            margin: 2rem auto;
+            padding: 2rem;
         }
-        button:hover {
-            background-color: #45a049;
-        }
-        #label-container div {
-            margin-top: 10px;
-            font-size: 18px;
-            color: #333;
-        }
-        #webcam-container canvas, #uploaded-image {
-            max-width: 300px;
-            max-height: 300px;
-            margin-top: 20px;
-        }
-        .container {
-            max-width: 800px;
-            margin: 40px auto;
-            padding: 20px;
-            background-color: #f9f9f9;
-            border: 1px solid #ddd;
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-        }
+
         .header {
             text-align: center;
-        }
-        .header h1 {
-            margin-top: 0;
-        }
-        .subtitle {
-            font-size: 18px;
-            color: #666;
-        }
-        .controls {
-            margin-top: 20px;
-        }
-        .btn {
-            background-color: #4CAF50;
+            margin-bottom: 2rem;
+            padding: 1.5rem;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
             color: white;
+            border-radius: 15px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        }
+
+        .analysis-container {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 2rem;
+            margin-top: 2rem;
+        }
+
+        .control-panel, .result-panel {
+            background: white;
+            padding: 2rem;
+            border-radius: 15px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+
+        .btn-group {
+            display: flex;
+            gap: 1rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .btn-custom {
+            padding: 0.75rem 1.5rem;
+            border-radius: 10px;
+            font-weight: 500;
+            transition: all 0.3s ease;
+        }
+
+        .btn-primary {
+            background: #667eea;
             border: none;
-            padding: 10px 20px;
-            font-size: 16px;
-            cursor: pointer;
-            border-radius: 5px;
-            margin: 10px;
         }
-        .btn-secondary {
-            background-color: #ccc;
-            color: #666;
+
+        .btn-primary:hover {
+            background: #5a6fd1;
+            transform: translateY(-2px);
         }
-        .btn:hover {
-            background-color: #45a049;
-        }
-        .file-upload {
-            margin-top: 20px;
-        }
-        .file-upload label {
-            display: block;
-            margin-bottom: 10px;
-        }
-        .file-upload input[type="file"] {
-            display: none;
-        }
-        .content-area {
-            margin-top: 20px;
-        }
-        .preview-section {
-            margin-bottom: 20px;
-        }
-        .image-preview {
-            margin-top: 20px;
-        }
-        .loading-overlay {
-            position: fixed;
-            top: 0;
-            left: 0;
+
+        #webcam-container {
             width: 100%;
-            height: 100%;
-            background-color: rgba(0, 0, 0, 0.5);
+            min-height: 300px;
+            border-radius: 10px;
+            overflow: hidden;
+            background: #f8f9fa;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        #webcam-container canvas, #uploaded-image {
+            max-width: 100%;
+            height: auto;
+            border-radius: 10px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+
+        #label-container {
+            margin-top: 1.5rem;
+            padding: 1rem;
+            background: #f8f9fa;
+            border-radius: 10px;
+        }
+
+        #label-container div {
+            padding: 0.5rem;
+            margin: 0.5rem 0;
+            background: white;
+            border-radius: 8px;
+            font-size: 1rem;
+            color: #444;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+        }
+
+        .upload-section {
+            text-align: center;
+            padding: 1.5rem;
+            border: 2px dashed #667eea;
+            border-radius: 10px;
+            margin: 1rem 0;
+        }
+
+        .custom-upload-button {
+            display: inline-block;
+            padding: 0.75rem 1.5rem;
+            background: #667eea;
+            color: white;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .custom-upload-button:hover {
+            background: #5a6fd1;
+            transform: translateY(-2px);
+        }
+
+        #imageUpload {
             display: none;
         }
-        .loading-spinner {
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            border: 10px solid #f3f3f3;
-            border-top: 10px solid #3498db;
-            border-radius: 50%;
-            width: 60px;
-            height: 60px;
-            animation: spin 2s linear infinite;
+
+        .info-box {
+            background: #e8eaf6;
+            padding: 1rem;
+            border-radius: 10px;
+            margin-top: 1rem;
+            font-size: 0.9rem;
+            color: #555;
         }
-        @keyframes spin {
-            0% {
-                transform: translate(-50%, -50%) rotate(0deg);
+
+        @media (max-width: 768px) {
+            .analysis-container {
+                grid-template-columns: 1fr;
             }
-            100% {
-                transform: translate(-50%, -50%) rotate(360deg);
+            
+            .main-container {
+                padding: 1rem;
             }
         }
     </style>
 </head>
-<div id="google_translate_element"></div>
 <body>
-    <div class="container">
+    <div class="main-container">
         <div class="header">
-            <h1>Retina Analysis</h1>
-            <p class="subtitle">Advanced AI-powered medical image analysis for detecting retinal conditions</p>
-        </div>
-        
-        <div class="controls">
-            <button type="button" onclick="startWebcam()" class="btn">
-                <i class="fas fa-camera"></i>
-                Start Camera
-            </button>
-            <button type="button" onclick="stopWebcam()" class="btn btn-secondary">
-                <i class="fas fa-stop"></i>
-                Stop Camera
-            </button>
-            <button type="button" onclick="captureWebcam()" class="btn">
-                <i class="fas fa-camera-retro"></i>
-                Capture Image
-            </button>
-            <div class="file-upload">
-                <label for="imageUpload">
-                    <i class="fas fa-upload"></i>
-                    Upload Retinal Scan
-                </label>
-                <input type="file" id="imageUpload" accept="image/*" onchange="uploadPhoto()">
-            </div>
+            <h1><i class="bi bi-eye"></i> Diabetic Retinopathy Analysis</h1>
+            <p class="mb-0">Advanced AI-powered retinal disease detection system</p>
         </div>
 
-        <div class="content-area">
-            <div class="preview-section">
-                <h3>Image Preview</h3>
-                <div id="webcam-container"></div>
-                <div class="image-preview">
-                    <img id="uploaded-image" style="display:none;">
+        <div class="analysis-container">
+            <div class="control-panel">
+                <h3 class="mb-4">Image Capture</h3>
+                <div class="btn-group">
+                    <button type="button" class="btn btn-custom btn-primary" onclick="startWebcam()">
+                        <i class="bi bi-camera-video"></i> Start Camera
+                    </button>
+                    <button type="button" class="btn btn-custom btn-danger" onclick="stopWebcam()">
+                        <i class="bi bi-camera-video-off"></i> Stop Camera
+                    </button>
+                    <button type="button" class="btn btn-custom btn-success" onclick="captureWebcam()">
+                        <i class="bi bi-camera"></i> Capture
+                    </button>
+                </div>
+
+                <div class="upload-section">
+                    <label for="imageUpload" class="custom-upload-button">
+                        <i class="bi bi-upload"></i> Upload Retinal Image
+                    </label>
+                    <input type="file" id="imageUpload" accept="image/*" onchange="uploadPhoto()">
+                    <p class="mt-2 text-muted">Supported formats: JPG, PNG</p>
+                </div>
+
+                <div id="webcam-container" class="mt-3"></div>
+                <img id="uploaded-image" style="display:none;">
+            </div>
+
+            <div class="result-panel">
+                <h3 class="mb-4">Analysis Results</h3>
+                <div id="label-container">
+                    <div class="text-center text-muted">
+                        <i class="bi bi-arrow-left-circle"></i>
+                        Start by capturing or uploading a retinal image
+                    </div>
+                </div>
+
+                <div class="info-box">
+                    <h5><i class="bi bi-info-circle"></i> About Retinopathy Analysis</h5>
+                    <p class="mb-0">
+                        This system uses advanced machine learning to analyze retinal images and 
+                        detect signs of diabetic retinopathy. The results show probability percentages 
+                        for different stages of the condition.
+                    </p>
                 </div>
             </div>
-            
-            <div id="label-container"></div>
         </div>
-    </div>
-
-    <div class="loading-overlay">
-        <div class="loading-spinner"></div>
     </div>
 
     <script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs@latest/dist/tf.min.js"></script>
@@ -299,14 +319,6 @@
 
         // Load the model initially
         loadModel();
-        function googleTranslateElementInit()
-{
-    new google.translate.TranslateElement(
-        {pageLanguage:'en'},
-        'google_translate_element'
-    );
-}
     </script>
-     <script type="text/javascript" src="//translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script>
 </body>
 </html>
