@@ -4,7 +4,7 @@ document.addEventListener('DOMContentLoaded', function() {
     tooltipTriggerList.map(function (tooltipTriggerEl) {
         return new bootstrap.Tooltip(tooltipTriggerEl);
     });
-
+// regerg
     // Add Doctor form handling
     const addDoctorForm = document.getElementById('addDoctorForm');
     const addDoctorBtn = document.querySelector('#addDoctorModal .btn-primary');
