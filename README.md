@@ -5,4 +5,3 @@ with love,
 Shashwat Upadhayay
 Vatsalya Bhadaurya
 Yaduraj Singh
-Aditya Singh
